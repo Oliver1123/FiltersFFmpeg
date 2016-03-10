@@ -30,7 +30,8 @@ public class FiltersActivity extends AppCompatActivity {
 //            String cmd = generateBlurCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
 //            String cmd = generateColorBalanceCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
 //            String cmd = generateCropCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-            String cmd = generateCurvesCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+//            String cmd = generateCurvesCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+            String cmd = generateDrawGridCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
 //            String cmd = generateInverseCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
 //            String cmd = generateSplitCommand(getInputFile(), null); // work
 //            String cmd = generateVideoCommand(getFileDir(), getFileDir() + "/result.mp4");
@@ -117,6 +118,16 @@ public class FiltersActivity extends AppCompatActivity {
                 inputFile +
                 " -vf " +
                 "curves=vintage " +
+                "-c:v libx264 -c:a copy -pix_fmt yuv420p " +
+                outputFile;
+        return cmd;
+    }
+
+    private String generateDrawGridCommand(String inputFile, String outputFile) {
+        String cmd = "-i " +
+                inputFile +
+                " -vf " +
+                "drawgrid=width=100:height=100:thickness=2:color=red@0.5 " +
                 "-c:v libx264 -c:a copy -pix_fmt yuv420p " +
                 outputFile;
         return cmd;
