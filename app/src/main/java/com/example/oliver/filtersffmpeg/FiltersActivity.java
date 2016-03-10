@@ -13,7 +13,7 @@ import java.io.File;
 
 public class FiltersActivity extends AppCompatActivity {
 
-    private final String IN_FILE_NAME = "result";
+    private final String IN_FILE_NAME = "sample_2";
     private final String OUT_FILE_NAME = "output";
     private final String IN_FILE = IN_FILE_NAME + ".mp4";
     private final String OUT_FILE = OUT_FILE_NAME+ ".mp4";
@@ -26,7 +26,8 @@ public class FiltersActivity extends AppCompatActivity {
         FFmpeg ffmpeg   = FFmpeg.getInstance(this);
 
         try {
-            String cmd = generateSepiaCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+//            String cmd = generateSepiaCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+            String cmd = generateBlurCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
 //            String cmd = generateInverseCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
 //            String cmd = generateSplitCommand(getInputFile(), null); // work
 //            String cmd = generateVideoCommand(getFileDir(), getFileDir() + "/result.mp4");
@@ -74,6 +75,16 @@ public class FiltersActivity extends AppCompatActivity {
                 inputFile +
                 " -filter_complex " +
                 "colorchannelmixer=.3:.4:.3:0:.3:.4:.3:0:.3:.4:.3 " +
+                "-c:v libx264 -c:a copy -pix_fmt yuv420p " +
+                outputFile;
+        return cmd;
+    }
+
+  private String generateBlurCommand(String inputFile, String outputFile) {
+        String cmd = "-i " +
+                inputFile +
+                " -filter_complex " +
+                "boxblur=luma_radius=2:luma_power=5 " +
                 "-c:v libx264 -c:a copy -pix_fmt yuv420p " +
                 outputFile;
         return cmd;
