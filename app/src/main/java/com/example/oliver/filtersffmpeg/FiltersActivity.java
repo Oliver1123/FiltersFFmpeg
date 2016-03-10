@@ -32,7 +32,8 @@ public class FiltersActivity extends AppCompatActivity {
 //            String cmd = generateCropCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
 //            String cmd = generateCurvesCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
 //            String cmd = generateDrawGridCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-            String cmd = generateEdgeDetectCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+//            String cmd = generateEdgeDetectCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+            String cmd = generateGeqCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
 //            String cmd = generateInverseCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
 //            String cmd = generateSplitCommand(getInputFile(), null); // work
 //            String cmd = generateVideoCommand(getFileDir(), getFileDir() + "/result.mp4");
@@ -139,6 +140,16 @@ public class FiltersActivity extends AppCompatActivity {
                 inputFile +
                 " -vf " +
                 "edgedetect=low=0.1:high=0.4 " +
+                "-c:v libx264 -c:a copy -pix_fmt yuv420p " +
+                outputFile;
+        return cmd;
+    }
+
+    private String generateGeqCommand(String inputFile, String outputFile) {
+        String cmd = "-i " +
+                inputFile +
+                " -vf " +
+                "format=gray,geq=lum_expr='(p(X,Y)+(256-p(X-4,Y-4)))/2' " +
                 "-c:v libx264 -c:a copy -pix_fmt yuv420p " +
                 outputFile;
         return cmd;
