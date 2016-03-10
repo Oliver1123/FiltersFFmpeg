@@ -1,9 +1,15 @@
 package com.example.oliver.filtersffmpeg;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
@@ -11,7 +17,7 @@ import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunnin
 
 import java.io.File;
 
-public class FiltersActivity extends AppCompatActivity {
+public class FiltersActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final String IN_FILE_NAME = "sample_2";
     private final String OUT_FILE_NAME = "output";
@@ -23,53 +29,62 @@ public class FiltersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filters);
-        FFmpeg ffmpeg   = FFmpeg.getInstance(this);
+        initShareButtons();
+//        FFmpeg ffmpeg   = FFmpeg.getInstance(this);
+//
+//        try {
+////            String cmd = generateSepiaCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+////            String cmd = generateBlurCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+////            String cmd = generateColorBalanceCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+////            String cmd = generateCropCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+////            String cmd = generateCurvesCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+////            String cmd = generateDrawGridCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+////            String cmd = generateEdgeDetectCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+//            String cmd = generateGeqCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+////            String cmd = generateInverseCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+////            String cmd = generateSplitCommand(getInputFile(), null); // work
+////            String cmd = generateVideoCommand(getFileDir(), getFileDir() + "/result.mp4");
+////            String cmd = "ffmpeg -filters";
+//            Log.d(TAG, "cmd : " + cmd);
+//            ffmpeg.execute(cmd.split(" "), new ExecuteBinaryResponseHandler() {
+//
+//                @Override
+//                public void onStart() {
+//                    Log.d(TAG, "ffmpeg onStart");
+//                }
+//
+//                @Override
+//                public void onProgress(String message) {
+//                    Log.d(TAG, "ffmpeg onPRogress " + message);
+//                }
+//
+//                @Override
+//                public void onFailure(String message) {
+//                    Log.d(TAG, "ffmpeg onFailure " + message);
+//                }
+//
+//                @Override
+//                public void onSuccess(String message) {
+//                    Log.d(TAG, "ffmpeg onSuccess " + message);
+//                }
+//
+//                @Override
+//                public void onFinish() {
+//                    Log.d(TAG, "ffmpeg onFinish");
+//                }
+//            });
+//        } catch (FFmpegCommandAlreadyRunningException e) {
+//            // Handle if FFmpeg is already running
+//            Log.d(TAG, "ffmpeg exception "  + e.getMessage());
+//        }
+    }
 
-        try {
-//            String cmd = generateSepiaCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-//            String cmd = generateBlurCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-//            String cmd = generateColorBalanceCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-//            String cmd = generateCropCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-//            String cmd = generateCurvesCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-//            String cmd = generateDrawGridCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-//            String cmd = generateEdgeDetectCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-            String cmd = generateGeqCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-//            String cmd = generateInverseCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-//            String cmd = generateSplitCommand(getInputFile(), null); // work
-//            String cmd = generateVideoCommand(getFileDir(), getFileDir() + "/result.mp4");
-//            String cmd = "ffmpeg -filters";
-            Log.d(TAG, "cmd : " + cmd);
-            ffmpeg.execute(cmd.split(" "), new ExecuteBinaryResponseHandler() {
-
-                @Override
-                public void onStart() {
-                    Log.d(TAG, "ffmpeg onStart");
-                }
-
-                @Override
-                public void onProgress(String message) {
-                    Log.d(TAG, "ffmpeg onPRogress " + message);
-                }
-
-                @Override
-                public void onFailure(String message) {
-                    Log.d(TAG, "ffmpeg onFailure " + message);
-                }
-
-                @Override
-                public void onSuccess(String message) {
-                    Log.d(TAG, "ffmpeg onSuccess " + message);
-                }
-
-                @Override
-                public void onFinish() {
-                    Log.d(TAG, "ffmpeg onFinish");
-                }
-            });
-        } catch (FFmpegCommandAlreadyRunningException e) {
-            // Handle if FFmpeg is already running
-            Log.d(TAG, "ffmpeg exception "  + e.getMessage());
-        }
+    private void initShareButtons() {
+        findViewById(R.id.btnShareFacebook).setOnClickListener(this);
+        findViewById(R.id.btnShareInstagram).setOnClickListener(this);
+        findViewById(R.id.btnShareWatsApp).setOnClickListener(this);
+        findViewById(R.id.btnShareMessenger).setOnClickListener(this);
+        findViewById(R.id.btnShareTwitter).setOnClickListener(this);
     }
 
     private String generataOUtFileName() {
@@ -86,7 +101,7 @@ public class FiltersActivity extends AppCompatActivity {
         return cmd;
     }
 
-  private String generateBlurCommand(String inputFile, String outputFile) {
+    private String generateBlurCommand(String inputFile, String outputFile) {
         String cmd = "-i " +
                 inputFile +
                 " -filter_complex " +
@@ -96,7 +111,7 @@ public class FiltersActivity extends AppCompatActivity {
         return cmd;
     }
 
-  private String generateColorBalanceCommand(String inputFile, String outputFile) {
+    private String generateColorBalanceCommand(String inputFile, String outputFile) {
         String cmd = "-i " +
                 inputFile +
                 " -vf colorbalance=rs=.5:bh=-0.5 " +
@@ -105,7 +120,7 @@ public class FiltersActivity extends AppCompatActivity {
         return cmd;
     }
 
-  private String generateCropCommand(String inputFile, String outputFile) {
+    private String generateCropCommand(String inputFile, String outputFile) {
         String cmd = "-i " +
                 inputFile +
                 " -vf " +
@@ -217,5 +232,70 @@ public class FiltersActivity extends AppCompatActivity {
     }
     private String getSoloFilesDir() {
         return new File(getFileDir(), "SOLO").getAbsolutePath();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnShareFacebook:
+               shareIntent("com.facebook.katana");
+                break;
+            case R.id.btnShareInstagram:
+                shareIntent("com.instagram.android");
+                break;
+            case R.id.btnShareWatsApp:
+                shareIntent("com.whatsapp");
+                break;
+            case R.id.btnShareMessenger:
+                shareIntent("com.facebook.orca");
+                break;
+            case R.id.btnShareTwitter:
+                shareIntent("com.twitter.android");
+                break;
+        }
+    }
+
+    private void shareIntent(String packageName) {
+
+        if (isPackageInstalled(packageName, FiltersActivity.this)) {
+            String type = "video/*";
+            // Create the new Intent using the 'Send' action.
+            Intent share = new Intent(Intent.ACTION_SEND);
+
+            // Set the MIME type
+            share.setType(type);
+
+            // Create the URI from the media
+            Uri uri = getInputFileUri();
+
+            // Add the URI to the Intent.
+            share.putExtra(Intent.EXTRA_STREAM, uri);
+
+            // Broadcast the Intent.
+            share.setPackage(packageName);
+            startActivity(Intent.createChooser(share, "Share to"));
+        } else {
+            goToMarket(packageName);
+        }
+    }
+
+    @NonNull
+    private Uri getInputFileUri() {
+        return Uri.fromFile(new File(getInputFile()));
+    }
+
+    private void goToMarket(String packageName) {
+        Intent intent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?id=" + packageName + "&hl=en"));
+        startActivity(intent);
+    }
+    private boolean isPackageInstalled(String packagename, Context context) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 }
