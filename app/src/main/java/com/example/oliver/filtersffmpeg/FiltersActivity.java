@@ -16,10 +16,11 @@ import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
 
 import java.io.File;
+import java.io.FilenameFilter;
 
 public class FiltersActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private final String IN_FILE_NAME = "sample_2";
+    private final String IN_FILE_NAME = "solo_in_000";
     private final String OUT_FILE_NAME = "output";
     private final String IN_FILE = IN_FILE_NAME + ".mp4";
     private final String OUT_FILE = OUT_FILE_NAME+ ".mp4";
@@ -30,53 +31,71 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filters);
         initShareButtons();
-//        FFmpeg ffmpeg   = FFmpeg.getInstance(this);
-//
-//        try {
-////            String cmd = generateSepiaCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-////            String cmd = generateBlurCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-////            String cmd = generateColorBalanceCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-////            String cmd = generateCropCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-////            String cmd = generateCurvesCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-////            String cmd = generateDrawGridCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-////            String cmd = generateEdgeDetectCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+        FFmpeg ffmpeg   = FFmpeg.getInstance(this);
+
+        try {
+//            String cmd = generateSepiaCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+//            String cmd = generateBlurCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+//            String cmd = generateColorBalanceCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+//            String cmd = generateCropCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+//            String cmd = generateCurvesCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+//            String cmd = generateDrawGridCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+//            String cmd = generateEdgeDetectCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
 //            String cmd = generateGeqCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-////            String cmd = generateInverseCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-////            String cmd = generateSplitCommand(getInputFile(), null); // work
-////            String cmd = generateVideoCommand(getFileDir(), getFileDir() + "/result.mp4");
-////            String cmd = "ffmpeg -filters";
-//            Log.d(TAG, "cmd : " + cmd);
-//            ffmpeg.execute(cmd.split(" "), new ExecuteBinaryResponseHandler() {
-//
-//                @Override
-//                public void onStart() {
-//                    Log.d(TAG, "ffmpeg onStart");
-//                }
-//
-//                @Override
-//                public void onProgress(String message) {
-//                    Log.d(TAG, "ffmpeg onPRogress " + message);
-//                }
-//
-//                @Override
-//                public void onFailure(String message) {
-//                    Log.d(TAG, "ffmpeg onFailure " + message);
-//                }
-//
-//                @Override
-//                public void onSuccess(String message) {
-//                    Log.d(TAG, "ffmpeg onSuccess " + message);
-//                }
-//
-//                @Override
-//                public void onFinish() {
-//                    Log.d(TAG, "ffmpeg onFinish");
-//                }
-//            });
-//        } catch (FFmpegCommandAlreadyRunningException e) {
-//            // Handle if FFmpeg is already running
-//            Log.d(TAG, "ffmpeg exception "  + e.getMessage());
-//        }
+//            String cmd = generateInverseCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+//            String cmd = generateSplitCommand(getInputFile(), null); // work
+//            String cmd = generateVideoCommand(getFileDir(), getFileDir() + "/result.mp4");
+//            String cmd = "ffmpeg -filters";
+            String cmd = generateSplitCommand(getInputFile(), null);
+            Log.d(TAG, "cmd : " + cmd);
+            ffmpeg.execute(cmd.split(" "), new ExecuteBinaryResponseHandler() {
+
+                @Override
+                public void onStart() {
+                    Log.d(TAG, "ffmpeg onStart");
+                }
+
+                @Override
+                public void onProgress(String message) {
+                    Log.d(TAG, "ffmpeg onPRogress " + message);
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    Log.d(TAG, "ffmpeg onFailure " + message);
+                }
+
+                @Override
+                public void onSuccess(String message) {
+                    Log.d(TAG, "ffmpeg onSuccess " + message);
+                    Log.d(TAG, "last frame: " + getLastFrame(getFileDir(), "image_"));
+                }
+
+                @Override
+                public void onFinish() {
+                    Log.d(TAG, "ffmpeg onFinish");
+                }
+            });
+        } catch (FFmpegCommandAlreadyRunningException e) {
+            // Handle if FFmpeg is already running
+            Log.d(TAG, "ffmpeg exception "  + e.getMessage());
+        }
+    }
+
+    private String getLastFrame(String fileDir, final String filePrefix) {
+        File fileDirectory = new File(fileDir);
+        File[] frames = fileDirectory.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String filename) {
+                if (filename.startsWith(filePrefix))
+                    return true;
+                return false;
+            }
+        });
+        for (int i = 0; i < frames.length - 1; i++) {
+            frames[i].delete();
+        }
+        return frames[frames.length - 1].getAbsolutePath();
     }
 
     private void initShareButtons() {
@@ -220,6 +239,14 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
                 dir +"/image_%03d.png -c:v libx264 -pix_fmt yuv420p " + outputFile;
         return cmd;
     }
+//
+//    private String generateGetFramesCommand(String inputFile) {
+//        String cmd = "-sseof 0 -i " +
+//                inputFile +
+//                " -frames:v 1 out1.jpg";
+////        ffmpeg -ss 0.5 -i inputfile.mp4 -t 1 -s 480x300 -f image2 imagefile.jpg
+//        return cmd;
+//    }
 
 
     private String getInputFile() {
