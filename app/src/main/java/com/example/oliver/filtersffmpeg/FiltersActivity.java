@@ -155,6 +155,16 @@ public class FiltersActivity extends AppCompatActivity {
         return cmd;
     }
 
+    private String generateRotateCommand(String inputFile, String outputFile) {
+        String cmd = "-i " +
+                inputFile +
+                " -vf " +
+                "rotate=PI/6 " +
+                "-c:v libx264 -c:a copy -pix_fmt yuv420p " +
+                outputFile;
+        return cmd;
+    }
+
     private String generateFadeCommand(String inputFile, String outputFile) {
         String cmd = "-i " +
                 inputFile +
