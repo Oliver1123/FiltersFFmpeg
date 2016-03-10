@@ -8,8 +8,12 @@
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 android:orientation="vertical"
               android:gravity="center"
+              android:background="@android:color/darker_gray"
                 tools:context=".FiltersActivity">
 
+    <com.example.oliver.filtersffmpeg.GridImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
