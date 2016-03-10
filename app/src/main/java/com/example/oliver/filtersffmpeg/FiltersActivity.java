@@ -27,7 +27,8 @@ public class FiltersActivity extends AppCompatActivity {
 
         try {
 //            String cmd = generateSepiaCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-            String cmd = generateBlurCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+//            String cmd = generateBlurCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+            String cmd = generateColorBalanceCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
 //            String cmd = generateInverseCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
 //            String cmd = generateSplitCommand(getInputFile(), null); // work
 //            String cmd = generateVideoCommand(getFileDir(), getFileDir() + "/result.mp4");
@@ -85,6 +86,15 @@ public class FiltersActivity extends AppCompatActivity {
                 inputFile +
                 " -filter_complex " +
                 "boxblur=luma_radius=2:luma_power=5 " +
+                "-c:v libx264 -c:a copy -pix_fmt yuv420p " +
+                outputFile;
+        return cmd;
+    }
+
+  private String generateColorBalanceCommand(String inputFile, String outputFile) {
+        String cmd = "-i " +
+                inputFile +
+                " -vf colorbalance=rs=.5:bh=-0.5 " +
                 "-c:v libx264 -c:a copy -pix_fmt yuv420p " +
                 outputFile;
         return cmd;
