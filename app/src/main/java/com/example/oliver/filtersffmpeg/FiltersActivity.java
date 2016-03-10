@@ -143,6 +143,15 @@ public class FiltersActivity extends AppCompatActivity {
                 outputFile;
         return cmd;
     }
+    private String generateElbgCommand(String inputFile, String outputFile) {
+        String cmd = "-i " +
+                inputFile +
+                " -vf " +
+                "elbg=codebook_length=250 " +
+                "-c:v libx264 -c:a copy -pix_fmt yuv420p " +
+                outputFile;
+        return cmd;
+    }
 
     private String generateInverseCommand(String inputFile, String outputFile) {
         String cmd = "-r 24 -i " +
