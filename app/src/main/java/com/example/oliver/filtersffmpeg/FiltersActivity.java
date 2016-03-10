@@ -28,7 +28,8 @@ public class FiltersActivity extends AppCompatActivity {
         try {
 //            String cmd = generateSepiaCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
 //            String cmd = generateBlurCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
-            String cmd = generateColorBalanceCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+//            String cmd = generateColorBalanceCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
+            String cmd = generateCropCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
 //            String cmd = generateInverseCommand(getInputFile(), getInputFile().replace(IN_FILE_NAME, generataOUtFileName()));
 //            String cmd = generateSplitCommand(getInputFile(), null); // work
 //            String cmd = generateVideoCommand(getFileDir(), getFileDir() + "/result.mp4");
@@ -95,6 +96,16 @@ public class FiltersActivity extends AppCompatActivity {
         String cmd = "-i " +
                 inputFile +
                 " -vf colorbalance=rs=.5:bh=-0.5 " +
+                "-c:v libx264 -c:a copy -pix_fmt yuv420p " +
+                outputFile;
+        return cmd;
+    }
+
+  private String generateCropCommand(String inputFile, String outputFile) {
+        String cmd = "-i " +
+                inputFile +
+                " -vf " +
+                "crop=320:320:0:0 " +
                 "-c:v libx264 -c:a copy -pix_fmt yuv420p " +
                 outputFile;
         return cmd;
