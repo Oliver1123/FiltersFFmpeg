@@ -149,7 +149,7 @@ public class FiltersActivity extends AppCompatActivity {
         String cmd = "-i " +
                 inputFile +
                 " -vf " +
-                "format=gray,geq=lum_expr='(p(X,Y)+(256-p(X-4,Y-4)))/2' " +
+                "geq=r='X/W*r(X,Y)':g='(1-X/W)*g(X,Y)':b='(H-Y)/H*b(X,Y)' " +
                 "-c:v libx264 -c:a copy -pix_fmt yuv420p " +
                 outputFile;
         return cmd;
